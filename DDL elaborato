@@ -1,0 +1,203 @@
+-- phpMyAdmin SQL Dump
+-- version 4.9.0.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Creato il: Mag 27, 2021 alle 13:11
+-- Versione del server: 10.4.6-MariaDB
+-- Versione PHP: 7.3.8
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `elaboratopalestra`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `abbonamento`
+--
+
+CREATE TABLE `abbonamento` (
+  `ID` int(11) NOT NULL,
+  `tipologia` varchar(32) DEFAULT NULL,
+  `inizio` datetime DEFAULT NULL,
+  `scadenza` datetime DEFAULT NULL,
+  `IdUtente` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `allenamento`
+--
+
+CREATE TABLE `allenamento` (
+  `ID` int(11) NOT NULL,
+  `inizio` datetime DEFAULT NULL,
+  `fine` datetime DEFAULT NULL,
+  `IdUtente` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `atrezzo`
+--
+
+CREATE TABLE `atrezzo` (
+  `ID` int(11) NOT NULL,
+  `nome` varchar(32) DEFAULT NULL,
+  `descrizione` varchar(32) NOT NULL,
+  `disponibile` int(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `fotografia`
+--
+
+CREATE TABLE `fotografia` (
+  `ID` int(11) NOT NULL,
+  `percorso` varchar(255) DEFAULT NULL,
+  `IdAttrezzo` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `utente`
+--
+
+CREATE TABLE `utente` (
+  `Id` int(11) NOT NULL,
+  `nome` varchar(32) DEFAULT NULL,
+  `cognome` varchar(32) DEFAULT NULL,
+  `dataNascita` datetime NOT NULL,
+  `amministratore` int(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `utilizza`
+--
+
+CREATE TABLE `utilizza` (
+  `ID` int(11) NOT NULL,
+  `inizio` datetime DEFAULT NULL,
+  `durata` int(16) DEFAULT NULL,
+  `ripetizioni` int(8) DEFAULT NULL,
+  `serie` int(8) DEFAULT NULL,
+  `IdAtrezzo` int(11) DEFAULT NULL,
+  `IdAllenamento` int(11) DEFAULT NULL,
+  `IdUtente` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indici per le tabelle scaricate
+--
+
+--
+-- Indici per le tabelle `abbonamento`
+--
+ALTER TABLE `abbonamento`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indici per le tabelle `allenamento`
+--
+ALTER TABLE `allenamento`
+  ADD PRIMARY KEY (`ID`,`IdUtente`),
+  ADD KEY `rel_utente` (`IdUtente`);
+
+--
+-- Indici per le tabelle `atrezzo`
+--
+ALTER TABLE `atrezzo`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indici per le tabelle `fotografia`
+--
+ALTER TABLE `fotografia`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `rel_attrezzo` (`IdAttrezzo`);
+
+--
+-- Indici per le tabelle `utente`
+--
+ALTER TABLE `utente`
+  ADD PRIMARY KEY (`Id`);
+
+--
+-- Indici per le tabelle `utilizza`
+--
+ALTER TABLE `utilizza`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- AUTO_INCREMENT per le tabelle scaricate
+--
+
+--
+-- AUTO_INCREMENT per la tabella `abbonamento`
+--
+ALTER TABLE `abbonamento`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `atrezzo`
+--
+ALTER TABLE `atrezzo`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `fotografia`
+--
+ALTER TABLE `fotografia`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `utente`
+--
+ALTER TABLE `utente`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `utilizza`
+--
+ALTER TABLE `utilizza`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Limiti per le tabelle scaricate
+--
+
+--
+-- Limiti per la tabella `allenamento`
+--
+ALTER TABLE `allenamento`
+  ADD CONSTRAINT `rel_utente` FOREIGN KEY (`IdUtente`) REFERENCES `utente` (`Id`);
+
+--
+-- Limiti per la tabella `fotografia`
+--
+ALTER TABLE `fotografia`
+  ADD CONSTRAINT `rel_attrezzo` FOREIGN KEY (`IdAttrezzo`) REFERENCES `atrezzo` (`ID`) ON UPDATE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
