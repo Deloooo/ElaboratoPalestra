@@ -1,0 +1,17 @@
+SELECT attrezzo.nome,count(*)
+FROM attrezzo inner join utilizza on attrezzo.ID = utilizza.IdAttrezzo
+WHERE utilizza.data BETWEEN $dataInizio AND $dataFine
+GROUP BY attrezzo.ID, attrezzo.nome
+HAVING count(*) >= all (
+						SELECT count(*)
+						FROM attrezzo inner join utilizza on attrezzo.ID = utilizza.IdAttrezzo
+						WHERE utilizza.data BETWEEN $dataInizio AND $dataFine
+						GROUP BY attrezzo.ID 
+					)
+					
+					
+					
+					
+					
+					
+					
